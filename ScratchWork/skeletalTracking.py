@@ -13,7 +13,7 @@ threshold = 0.1
 # Read the network into memory
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
-def drawSkeleton(frame):
+def identifySkeleton(frame):
 	# step 1: process input into a form understandable by the network
 	height, width, chanels = frame.shape
 	inWidth = 368
@@ -48,15 +48,18 @@ def drawSkeleton(frame):
 		else:
 			points.append(None)
 
-    # Draw Skeleton
-    for pair in POSE_PAIRS:
-        partA = pair[0]
-        partB = pair[1]
+	return points
 
-        if points[partA] and points[partB]:
-            cv2.line(frame, points[partA], points[partB], (0, 255, 255), 2)
-            cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
+def drawSkeleton(frame, points):
+	# Draw Skeleton
+	for pair in POSE_PAIRS:
+		partA = pair[0]
+		partB = pair[1]
 
-    # cv2.imshow('Output-Skeleton', frame)
+		if points[partA] and points[partB]:
+			cv2.line(frame, points[partA], points[partB], (0, 255, 255), 2)
+			cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
 
-    return frame
+	# cv2.imshow('Output-Skeleton', frame)
+
+	return frame
