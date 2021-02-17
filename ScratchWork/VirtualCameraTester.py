@@ -7,7 +7,8 @@ import numpy as np
 
 
 # import sys
-from ScratchWork.video_filter import Filter
+from video_filter import Filter
+import skeletalTracking
 
 
 class Control:
