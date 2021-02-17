@@ -40,6 +40,8 @@ class Control:
 		self.height = int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 		self.fps = self.cam.get(cv2.CAP_PROP_FPS)
 
+		self.INTERVAL = 75 # how often to refresh skeleton in units of frames
+
 		# print out status
 		print('webcam capture started ({}x{} @ {}fps)'.format(self.width,
 														self.height, self.fps))
@@ -65,7 +67,7 @@ class Control:
 			virtual_cam.delay = 0
 			frame_count = 0
 
-                frame_count += 1
+			skeletonPoints = []
 			while True:
 
 				# STEP 1: capture video from webcam
@@ -80,7 +82,10 @@ class Control:
 				if raw_frame is None:
 					continue
 
+				if frame_count % self.INTERVAL == 0:
+					skeletonPoints = skeletalTracking.identifySkeleton(raw_frame)
 
+				raw_frame = skeletalTracking.drawSkeleton(raw_frame, skeletonPoints)
 
 				# convert frame to RGB
 				color_frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB)
@@ -97,6 +102,7 @@ class Control:
 				virtual_cam.send(out_frame_rgba)
 				virtual_cam.sleep_until_next_frame() # we might want to arrange something with scheduelingx
 
+				frame_count += 1
 
 # run program
 if __name__ == '__main__':
