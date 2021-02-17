@@ -7,7 +7,7 @@ import numpy as np
 
 
 # import sys
-from video_filter import Filter
+from ScratchWork.video_filter import Filter
 
 
 class Control:
@@ -71,7 +71,8 @@ class Control:
                 ret, raw_frame = self.cam.read()
                 #raw_frame = cv2.flip(raw_frame, 1)
 
-                for rgb_counter in range(0,3):
+                # draw box
+                for rgb_counter in range(0, 3):
                     raw_frame[0:100, 0:100, rgb_counter] = 100
 
                 # STEP 2: process frames
@@ -80,8 +81,6 @@ class Control:
 
                 # convert frame to RGB
                 color_frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB)
-
-
 
                 # add alpha channel
                 out_frame_rgba = np.zeros(
@@ -99,9 +98,9 @@ class Control:
 if __name__ == '__main__':
     try:
         instance = Control()
-        #instance.logger.startTimer()
+        # instance.logger.startTimer()
         instance.run()
-        #instance.logger.endTimer()
+        # instance.logger.endTimer()
     except Exception as e:
         print("Something went wrong" + str(e))
         print(e)
