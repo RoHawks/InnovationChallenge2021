@@ -1,12 +1,12 @@
 import cv2
 import pyvirtualcam
-from PIL import ImageFont, ImageDraw, Image
+# from PIL import ImageFont, ImageDraw, Image
 import numpy as np
-import logger
+# import logger
 #from pynput import keyboard
 
 
-import sys
+# import sys
 from video_filter import Filter
 
 
