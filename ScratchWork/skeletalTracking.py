@@ -1,8 +1,9 @@
-# based off post https://learnopencv.com/deep-learning-based-human-pose-estimation-using-opencv-cpp-python/ 
+# based off post https://learnopencv.com/deep-learning-based-human-pose-estimation-using-opencv-cpp-python/
 
 
 import cv2
 import numpy as np
+import time
 # pre-trained model
 protoFile = "poseNN/pose_deploy_linevec.prototxt"
 weightsFile = "poseNN/pose_iter_440000.caffemodel"  # this is the COCO model
@@ -14,52 +15,56 @@ threshold = 0.1
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 def identifySkeleton(frame):
-	# step 1: process input into a form understandable by the network
-	height, width, chanels = frame.shape
-	inWidth = 368
-	inHeight = 368
-	input = cv2.dnn.blobFromImage(frame, 1.0 / 255, (inWidth, inHeight), (0, 0, 0), swapRB=False, crop=False)
+    tStart = time.time()
+    # step 1: process input into a form understandable by the network
+    height, width, chanels = frame.shape
+    inWidth = 368
+    inHeight = 368
+    input = cv2.dnn.blobFromImage(frame, 1.0 / 255, (inWidth, inHeight), (0, 0, 0), swapRB=False, crop=False)
 
-	# step 2: foward propogate through the ML network
-	net.setInput(input)
-	output = net.forward()
+    # step 2: foward propogate through the ML network
+    net.setInput(input)
+    output = net.forward()
 
-	H = output.shape[2]
-	W = output.shape[3]
+    H = output.shape[2]
+    W = output.shape[3]
 
-	# step 3: determine the skeleton based on the probability domain sfound by the networke
+    # step 3: determine the skeleton based on the probability domain sfound by the networke
 
-	# Empty list to store the detected keypoints
-	points = []
-	for i in range(nPoints):
-		# confidence map of corresponding body's part.
-		probMap = output[0, i, :, :]
+    # Empty list to store the detected keypoints
+    points = []
+    for i in range(nPoints):
+        # confidence map of corresponding body's part.
+        probMap = output[0, i, :, :]
 
-		# Find global maxima of the probMap.
-		minVal, prob, minLoc, point = cv2.minMaxLoc(probMap)
+        # Find global maxima of the probMap.
+        minVal, prob, minLoc, point = cv2.minMaxLoc(probMap)
 
-		# Scale the point to fit on the original image
-		x = (width * point[0]) / W
-		y = (height * point[1]) / H
+        # Scale the point to fit on the original image
+        x = (width * point[0]) / W
+        y = (height * point[1]) / H
 
-		if prob > threshold:
-			# Add the point to the list if the probability is greater than the threshold
-			points.append((int(x), int(y)))
-		else:
-			points.append(None)
+        if prob > threshold:
+            # Add the point to the list if the probability is greater than the threshold
+            points.append((int(x), int(y)))
+        else:
+            points.append(None)
 
-	return points
+    tEnd = time.time()
+    print(tEnd - tStart)
+
+    return points
 
 def drawSkeleton(frame, points):
-	# Draw Skeleton
-	for pair in POSE_PAIRS:
-		partA = pair[0]
-		partB = pair[1]
+    # Draw Skeleton	
+    for pair in POSE_PAIRS:
+        partA = pair[0]
+        partB = pair[1]
 
-		if points[partA] and points[partB]:
-			cv2.line(frame, points[partA], points[partB], (0, 255, 255), 2)
-			cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
+        if points[partA] and points[partB]:
+            cv2.line(frame, points[partA], points[partB], (0, 255, 255), 2)
+            cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
 
-	# cv2.imshow('Output-Skeleton', frame)
+    # cv2.imshow('Output-Skeleton', frame)
 
-	return frame
+    return frame

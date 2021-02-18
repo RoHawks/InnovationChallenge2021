@@ -40,7 +40,7 @@ class Control:
 		self.height = int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 		self.fps = self.cam.get(cv2.CAP_PROP_FPS)
 
-		self.INTERVAL = 75 # how often to refresh skeleton in units of frames
+		# self.INTERVAL = 75 # how often to refresh skeleton in units of frames
 
 		# print out status
 		print('webcam capture started ({}x{} @ {}fps)'.format(self.width,
@@ -67,6 +67,7 @@ class Control:
 			virtual_cam.delay = 0
 			frame_count = 0
 
+			print("now printing secconds taken per frame:")
 			skeletonPoints = []
 			while True:
 
@@ -82,8 +83,8 @@ class Control:
 				if raw_frame is None:
 					continue
 
-				if frame_count % self.INTERVAL == 0:
-					skeletonPoints = skeletalTracking.identifySkeleton(raw_frame)
+				# if frame_count % self.INTERVAL == 0:
+				skeletonPoints = skeletalTracking.identifySkeleton(raw_frame)
 
 				raw_frame = skeletalTracking.drawSkeleton(raw_frame, skeletonPoints)
 
