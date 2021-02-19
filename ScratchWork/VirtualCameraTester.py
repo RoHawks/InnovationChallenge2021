@@ -2,7 +2,6 @@ import cv2
 import pyvirtualcam
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
-import logger
 #from pynput import keyboard
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
@@ -60,13 +59,15 @@ class Control:
 
 
         with pyvirtualcam.Camera(width=self.width, height=self.height, fps=self.fps) as virtual_cam:
-            # print status
             e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(self.width, self.height))  # setup model
+            
+            # print status
             print('tensorflow model loaded')
             print(
                 'virtual camera started ({}x{} @ {}fps)'.format(virtual_cam.width, virtual_cam.height, virtual_cam.fps))
             virtual_cam.delay = 0
             frame_count = 0
+
 
             while True:
                 frame_count += 1
@@ -84,14 +85,13 @@ class Control:
                 # convert frame to RGB
                 color_frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB)
 
-
-
                 # add alpha channel
                 out_frame_rgba = np.zeros(
                     (self.height, self.width, 4), np.uint8)
                 out_frame_rgba[:, :, :3] = color_frame
                 out_frame_rgba[:, :, 3] = 255
 
+                
                 # STEP 3: send to virtual camera
                 # virtual_cam.send(out_frame_rgba)
                 virtual_cam.send(out_frame_rgba)
@@ -102,9 +102,9 @@ class Control:
 if __name__ == '__main__':
     try:
         instance = Control()
-        #instance.logger.startTimer()
+        # instance.logger.startTimer()
         instance.run()
-        #instance.logger.endTimer()
+        # instance.logger.endTimer()
     except Exception as e:
         print("Something went wrong" + str(e))
         print(e)
