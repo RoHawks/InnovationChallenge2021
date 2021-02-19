@@ -61,6 +61,8 @@ class Control:
 
         with pyvirtualcam.Camera(width=self.width, height=self.height, fps=self.fps) as virtual_cam:
             # print status
+            e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(self.width, self.height))  # setup model
+            print('tensorflow model loaded')
             print(
                 'virtual camera started ({}x{} @ {}fps)'.format(virtual_cam.width, virtual_cam.height, virtual_cam.fps))
             virtual_cam.delay = 0
@@ -70,14 +72,14 @@ class Control:
                 frame_count += 1
 
                 # STEP 1: capture video from webcam
-                e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size= (self.width, self.height))
                 ret, raw_frame = self.cam.read()
-                #raw_frame = cv2.flip(raw_frame, 1)
-                humans = e.inference(raw_frame)
-                raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
+                raw_frame = cv2.flip(raw_frame, 1)
                 # STEP 2: process frames
                 if raw_frame is None:
                     continue
+
+                humans = e.inference(raw_frame)
+                raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
 
                 # convert frame to RGB
                 color_frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB)
