@@ -65,12 +65,12 @@ class Control:
                 'virtual camera started ({}x{} @ {}fps)'.format(virtual_cam.width, virtual_cam.height, virtual_cam.fps))
             virtual_cam.delay = 0
             frame_count = 0
-
+            e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(self.width, self.height))
             while True:
                 frame_count += 1
 
                 # STEP 1: capture video from webcam
-                e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size= (self.width, self.height))
+
                 ret, raw_frame = self.cam.read()
                 #raw_frame = cv2.flip(raw_frame, 1)
                 humans = e.inference(raw_frame)
