@@ -74,13 +74,13 @@ class Control:
 
 				ret, raw_frame = self.cam.read()
 				#raw_frame = cv2.flip(raw_frame, 1)
-				humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
 
-				raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
 				# STEP 2: process frames
 				if raw_frame is None:
 					continue
 
+				humans = e.inference(raw_frame, resize_to_default=True, upsample_size=4)
+				raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
 
 				# display FPS
 				cv2.putText(raw_frame,
