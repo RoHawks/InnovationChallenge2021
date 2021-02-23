@@ -2,10 +2,10 @@ import cv2
 import pyvirtualcam
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
-import logger
 #from pynput import keyboard
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
+import time
 
 
 import sys
@@ -64,6 +64,7 @@ class Control:
 			print(
 				'virtual camera started ({}x{} @ {}fps)'.format(virtual_cam.width, virtual_cam.height, virtual_cam.fps))
 			virtual_cam.delay = 0
+			fps_time = 0
 			frame_count = 0
 			e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(self.width, self.height))
 			while True:
@@ -80,10 +81,16 @@ class Control:
 				if raw_frame is None:
 					continue
 
+
+				# display FPS
+				cv2.putText(raw_frame,
+                                    "FPS: %f" % (1.0 / (time.time() - fps_time)),
+                                    (10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                                    (0, 255, 0), 2)
+				fps_time = time.time()
+
 				# convert frame to RGB
 				color_frame = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2RGB)
-
-
 
 				# add alpha channel
 				out_frame_rgba = np.zeros(
