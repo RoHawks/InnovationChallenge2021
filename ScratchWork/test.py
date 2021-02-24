@@ -13,6 +13,7 @@ image = common.read_imgfile(input, None, None)
 e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(400,400))
 humans = e.inference(image, resize_to_default=True, upsample_size=4)
 
+
 angles = {}
 
 for human in humans:
