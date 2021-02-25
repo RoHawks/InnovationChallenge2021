@@ -1,13 +1,12 @@
 import cv2
 import pyvirtualcam
-from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 #from pynput import keyboard
-from ScratchWork.tf_pose import common
+from tf_pose import common
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
 import time
-from ScratchWork.tf_pose.common import CocoPart
+from tf_pose.common import CocoPart
 from util import calcTheta
 
 
@@ -63,13 +62,15 @@ class Control:
 
 
 		with pyvirtualcam.Camera(width=self.width, height=self.height, fps=self.fps) as virtual_cam:
-			# print status
-			print(
-				'virtual camera started ({}x{} @ {}fps)'.format(virtual_cam.width, virtual_cam.height, virtual_cam.fps))
 			virtual_cam.delay = 0
 			fps_time = 0
 			frame_count = 0
+
 			e = TfPoseEstimator(get_graph_path("mobilenet_v2_small"), target_size=(self.width, self.height))
+
+			print(f'virtual camera started ({virtual_cam.width}x{virtual_cam.height} @ {virtual_cam.fps}fps)')
+			print('TfPoseEstimator loaded')
+
 			while True:
 				frame_count += 1
 
@@ -110,9 +111,9 @@ class Control:
 if __name__ == '__main__':
 	try:
 		instance = Control()
-		#instance.logger.startTimer()
+		# instance.logger.startTimer()
 		instance.run()
-		#instance.logger.endTimer()
+		# instance.logger.endTimer()
 	except Exception as e:
 		print("Something went wrong" + str(e))
 		print(e)
