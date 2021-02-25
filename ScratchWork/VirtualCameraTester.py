@@ -8,6 +8,7 @@ from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
 import time
 from ScratchWork.tf_pose.common import CocoPart
+from util import calcTheta
 
 
 import sys
@@ -82,31 +83,12 @@ class Control:
 					continue
 
 				humans = e.inference(raw_frame, resize_to_default=True, upsample_size=4)
-				centers = {}
-				limbs = {}
-				for human in humans:
-					for i in range(common.CocoPart.Background.value):
-						if i not in human.body_parts.keys():
-							continue
-
-						body_part = human.body_parts[i]
-						center = (int(body_part.x * self.width + 0.5), int(body_part.y * self.height + 0.5))
-						centers[i] = center
-
-					for pair_order, pair in enumerate(common.CocoPairsRender):
-						if pair[0] not in human.body_parts.keys() or pair[1] not in human.body_parts.keys():
-							continue
-						limbs["right"] = np.array([centers[CocoPart.RHip] - centers[CocoPart.RKnee]])
-						limbs["left"] = [centers[CocoPart.LHip] - centers[CocoPart.LKnee]]
-						# npimg = cv2.line(npimg, centers[pair[0]], centers[pair[1]], common.CocoColors[pair_order], 3)
-
-				#raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
 
 				# display FPS
 				cv2.putText(raw_frame,
-                                    "cosine angle: " + limbs.get("right").dot(limbs.get("left"))/(np.linalg.norm(limbs.get("right"))*(np.linalg.norm(limbs.get("left")))),
-                                    (10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                    (0, 255, 0), 2)
+							"cosine angle: " + str(calcTheta(humans)),
+							(10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+							(0, 255, 0), 2)
 				fps_time = time.time()
 
 				# convert frame to RGB
