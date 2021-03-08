@@ -4,7 +4,8 @@ import cv2
 from tf_pose import common
 import time
 import numpy as np
-from ScratchWork.util import calcTheta
+from util import calcThetas
+from util import Angle
 
 
 
@@ -21,12 +22,18 @@ centers = {}
 #raw_frame = TfPoseEstimator.draw_humans(raw_frame, humans, imgcopy=False)
 
 # display FPS
-cv2.putText(image,
-            "cosine angle: " + str(calcTheta(humans[0])),
-            (10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-            (0, 255, 0), 2)
 
 # angles = {}
+
+measures = calcThetas(humans[0])
+y = 10
+for angle in Angle:
+	out = str(angle.name) + ": " + str(measures[angle.value])[:5]
+	cv2.putText(image,
+            out,
+            (10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+            (0, 255, 0), 2)
+	y += 20
 
 # for human in humans:
 # 	for i in range(common.CocoPart.Background.value):
