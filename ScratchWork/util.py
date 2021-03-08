@@ -1,6 +1,17 @@
 import math
 from tf_pose.common import CocoPart, CocoPairsRender
 import numpy as np
+from enum import Enum
+
+class Angle(Enum): # the index for the angle with the joint centnered at name
+    LElbow = 0
+    LShoulder = 1
+    LHip = 2
+    LKnee = 3
+    RElbow = 4
+    RShoulder = 5
+    RHip = 6
+    RKnee = 7
 
 def calcTheta(humans):
     for human in humans:
@@ -41,3 +52,20 @@ def cos(bp, point1, rootPoint, point2):
         return dotProduct / (magnitude1 * magnitude2)
     except KeyError:
         return None
+
+
+def calcThetas(human):
+    angle_vector = []
+    bp = human.body_parts
+
+    angle_vector.append(cos(bp, CocoPart.LWrist, CocoPart.LElbow, CocoPart.Neck))
+    angle_vector.append(cos(bp, CocoPart.LElbow, CocoPart.Neck, CocoPart.LHip))
+    angle_vector.append(cos(bp, CocoPart.Neck, CocoPart.LHip, CocoPart.LKnee))
+    angle_vector.append(cos(bp, CocoPart.LHip, CocoPart.LKnee, CocoPart.LAnkle))
+
+    angle_vector.append(cos(bp, CocoPart.RWrist, CocoPart.RElbow, CocoPart.Neck))
+    angle_vector.append(cos(bp, CocoPart.RElbow, CocoPart.Neck, CocoPart.RHip))
+    angle_vector.append(cos(bp, CocoPart.Neck, CocoPart.RHip, CocoPart.RKnee))
+    angle_vector.append(cos(bp, CocoPart.RHip, CocoPart.RKnee, CocoPart.RAnkle))
+
+    return angle_vector
