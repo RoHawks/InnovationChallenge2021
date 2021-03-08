@@ -26,3 +26,18 @@ def calcTheta(humans):
         return limbs.get("right").dot(limbs.get("left")) / (np.linalg.norm(limbs.get("right")) * (np.linalg.norm(limbs.get("left"))))
     return 0  # no humans in frame
 
+def cos(bp, point1, rootPoint, point2):
+    try:
+        x1 = bp[point1.value].x - bp[rootPoint.value].x
+        y1 = bp[point1.value].y - bp[rootPoint.value].y
+        x2 = bp[point2.value].x - bp[rootPoint.value].x
+        y2 = bp[point2.value].y - bp[rootPoint.value].y
+
+        magnitude1 = math.sqrt(x1 ** 2 + y1 ** 2)
+        magnitude2 = math.sqrt(x2 ** 2 + y2 ** 2)
+
+        dotProduct = x1 * x2 + y1 * y2
+
+        return dotProduct / (magnitude1 * magnitude2)
+    except KeyError:
+        return None
