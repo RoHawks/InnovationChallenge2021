@@ -7,7 +7,8 @@ from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
 import time
 from tf_pose.common import CocoPart
-from util import calcTheta
+from util import calcThetas
+from comparator import compareBodies
 
 
 import sys
@@ -59,7 +60,7 @@ class Control:
 
 		:return: None
 		"""
-
+		input = "ScratchWork/person.jpg"
 
 		with pyvirtualcam.Camera(width=self.width, height=self.height, fps=self.fps) as virtual_cam:
 			virtual_cam.delay = 0
@@ -77,6 +78,8 @@ class Control:
 				# STEP 1: capture video from webcam
 
 				ret, raw_frame = self.cam.read()
+				image = common.read_imgfile(input, None, None)
+
 				#raw_frame = cv2.flip(raw_frame, 1)
 
 				# STEP 2: process frames
@@ -84,10 +87,11 @@ class Control:
 					continue
 
 				humans = e.inference(raw_frame, resize_to_default=True, upsample_size=4)
+				testhuman = e.inference(image, resize_to_default=True, upsample_size=4)
 
 				# display FPS
 				cv2.putText(raw_frame,
-							"cosine angle: " + str(calcTheta(humans)),
+							"cosine angles: " + str(calcThetas(humans) + " " + compareBodies(calcThetas(humans[0]), calcThetas(testhuman[0]))),
 							(10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
 							(0, 255, 0), 2)
 				fps_time = time.time()
