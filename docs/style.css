@@ -1,3 +1,41 @@
+h1 {
+    font-family: Verdana, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+}
+
+/* table credits to https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    min-width: 400px;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #8e0082;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: thin solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #8e0082;
+}
+
 .logo {
     display: block;
     margin-left: auto;
