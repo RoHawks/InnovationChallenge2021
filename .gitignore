@@ -1,3 +1,4 @@
 
 *.caffemodel
 .vscode/settings.json
+*.pyc
