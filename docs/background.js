@@ -5,7 +5,11 @@ function increment() {
 }
 
 function pullData() {
-	// pull data from API
+	const api_url = "http://127.0.0.1:5000/show";
+	var response = await fetch(api_url);
+	scores = JSON.parse(response);
+	return scores;
+	/*
 	return {
 		"Forrest": Math.trunc(100 * Math.random()),
 		"Eric": Math.trunc(100 * Math.random()),
@@ -14,6 +18,7 @@ function pullData() {
 		"Kyler": Math.trunc(100 * Math.random()),
 		"Uday": Math.trunc(100 * Math.random()),
 	};
+	*/
 }
 
 function updateData() {
