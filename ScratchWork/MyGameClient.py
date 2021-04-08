@@ -6,11 +6,12 @@ user_url = "https://rohawks.com/PostUserJoints"
 from SkeletonGrabber import Control
 
 cam = Control()
+user = "Admin"
 if host == True:
     while True:
         joints = cam.getangles()
-        payload = {"Joints": joints}
-        requests.post(host_url, payload)
+        payload = {user: joints}
+        requests.post(host_url + "update", payload)
 else:
     while True:
         joints = cam.getangles()
