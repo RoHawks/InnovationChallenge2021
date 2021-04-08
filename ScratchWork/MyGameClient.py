@@ -1,7 +1,7 @@
 import requests
 host = True
 username = ""
-host_url = "https://rohawks.com/PostHostJoints"
+host_url = "http://67.245.21.178:5000/"
 user_url = "https://rohawks.com/PostUserJoints"
 from SkeletonGrabber import Control
 
