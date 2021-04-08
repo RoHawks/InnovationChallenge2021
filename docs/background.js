@@ -1,9 +1,3 @@
-var counter = 0;
-function increment() {
-	counter++;
-	document.getElementById("counter").textContent = `Congratulations! You've built ${counter} robots!`;
-}
-
 function pullData() {
 	const api_url = "http://127.0.0.1:5000/show";
 	var response = await fetch(api_url, {method: 'GET'});
