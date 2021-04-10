@@ -1,8 +1,8 @@
-function pullData() {
+async function pullData() {
 	const api_url = "http://67.245.21.178:5000/show";
-	var response = await fetch(api_url, {method: 'GET'});
-	scores = JSON.parse(response);
-	return scores;
+	var response = await fetch(api_url, { method: 'GET' });
+	var data = await response.json();
+	return data;
 	/*
 	return {
 		"Forrest": Math.trunc(100 * Math.random()),
@@ -15,8 +15,9 @@ function pullData() {
 	*/
 }
 
-function updateData() {
-	let scores = pullData();
+async function updateData() {
+	let scores = await pullData();
+	// window.alert(scores);
 	scores = dictonarySort(scores);
 	let table = document.getElementById("scores").getElementsByTagName('tbody')[0];
 
@@ -30,7 +31,7 @@ function updateData() {
 
 		// set #
 		let placeCell = newRow.insertCell(0);
-		placeCell.appendChild(document.createTextNode(i+1));
+		placeCell.appendChild(document.createTextNode(i + 1));
 		// set name
 		let nameCell = newRow.insertCell(1);
 		nameCell.appendChild(document.createTextNode(name));
